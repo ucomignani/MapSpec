@@ -1,0 +1,14 @@
+SOURCE
+TravelAgency(travelAgency1,TC,Marseille)
+Airline(agency1,AA,Paris)
+Airline(agency2,Ev,Lyon)
+Flight(Lyon,Paris,agency1)
+Flight(Paris,Lyon,agency2)
+TARGET
+Departure(Lyon,comp1)
+Departure(Paris,comp2)
+Arrival(Paris,comp1)
+Arrival(Lyon,comp2)
+Company(comp1,AA,Paris)
+Company(comp2,Ev,Lyon)
+Company(comp3,TC,Marseille)

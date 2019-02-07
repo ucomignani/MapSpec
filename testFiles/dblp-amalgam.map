@@ -1,0 +1,26 @@
+# name of the mapping
+Name: dblp-amalgam
+# source and target schemas
+Source: DInProceedings(pid, title, pages, booktitle, url, cdrom, month, year); DArticle(pid, title, pages, cdrom, month, year, volume, journal, number, url); DBook(pid, editor, title, publisher, year, isbn, cdrom, cite, url); MastersThesis(author, title, year, school); PhDThesis(author, title, year, series, number, month, school, publisher, isbn); WWW(pid, title, year, url); PubAuthors(pid, author)
+# Proceedings(editor, title, publisher, year, isbn, url);
+Target: Article(articleid, title, journal, year, month, pages, vol, num, loc, class, note, annote); ArticlePublished(articleid, authid); Author(authid, name); Book(bookid, title, publisher, year, month, pages, vol, num, loc, class, note, annote); BookPublished(bookid, authid); InProceedings(inprocid, title, bktitle, year, month, pages, vol, num, loc, class, note, annote); InProcPublished(inprocid, authid); Misc(miscid, title, howpub, confloc, year, month, pages, vol, num, loc, class, note, annote); MiscPublished(miscid, authid); 
+# InCollection(collid, title, bktitle, year, month, pages, vol, num, loc, class, note, annote); 
+# InCollPublished(collid, authid); 
+# Manual(manid, title, org, year, month, pages, vol, num, loc, class, note, annote); 
+# ManualPublished(manid, authid);  
+# TechPublished(techid, authid); 
+# TechReport(techid, title, inst, year, month, pages, vol, num, loc, class, note, annote)
+# constraints; atoms separated by &; lhs -> rhs
+
+Tgd:
+DInProceedings(pid, title, pages, booktitle, url, cdrom, month, year) -> InProceedings(inprocid, title, booktitle, year, month, pages, vol, num, loc, class, note, annote);
+WWW(pid, title, year, url) -> Misc(miscid, title, howpub, confloc, year, month, pages, vol, num, loc, class, note, annote)
+DArticle(pid, title, pages, cdrom, month, year, volume, journal, number, url) -> Article(articleid, title, journal, year, month, pages, volume, number, loc, class, note, annote)
+DArticle(pid, title, pages, cdrom, month, year, volume, journal, number, url) & PubAuthors(pid, author) -> ArticlePublished(articleid, authid) & Article(articleid, title, journal, year, month, pages, volume, number, loc, class, note, annote) & Author(authid, author)   
+PhDThesis(author, title, year, series, number, month, school, publisher, isbn) -> MiscPublished(miscid, authid) & Misc(miscid, title, howpub, confloc, year, month, pages, vol, number, loc, class, note, school) & Author(authid, author)
+DBook(pid, editor, title, publisher, year, isbn, cdrom, cite, url) -> Book(bookid, title, publisher, year, month, pages, vol, num, loc, class, note, annote)
+MastersThesis(author, title, year, school) -> MiscPublished(miscid, authid) & Misc(miscid, title, howpub, confloc, year, month, pages, vol, num, loc, class, note, school) & Author(authid, author)
+DBook(pid, editor, title, publisher, year, isbn, cdrom, cite, url) & PubAuthors(pid, author) -> BookPublished(bookid, authid) & Author(authid, author) & Book(bookid, title, publisher, year, month, pages, vol, num, loc, class, note, annote)
+WWW(pid, title, year, url) & PubAuthors(pid, author) -> MiscPublished(miscid, authid) & Misc(miscid, title, howpub, confloc, year, month, pages, vol, num, loc, class, note, annote) & Author(authid, author)
+DInProceedings(pid, title, pages, booktitle, url, cdrom, month, year) & PubAuthors(pid, author) -> InProcPublished(inprocid, authid) & Author(authid, author) & InProceedings(inprocid, title, booktitle, year, month, pages, vol, num, loc, class, note, annote)
+  
